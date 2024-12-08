@@ -5,84 +5,145 @@ import java.util.Random;
 public class Main {
     public static void main(String[] args) {
         //otestujCasovo();
-
-        mojAlg(200,50,20);
-
+        otestujPocet();
     }
 
-    private static void mojAlg(int rozsah,int dlzka,int pocet) {
-        int[][] vysledok = new int[pocet][dlzka];
-        int[] pocetNastavenych = new int[pocet];
-        int castDlzka = rozsah/pocet;
+    private static void test() {
+        ArrayList<Predmet> predmety = vygenerujPredmetyRovnomerne(2000);
+        int kapacitaBatoha = 1000;
 
-        //jednoducho rozdelim co sa da rozdelit
-        for (int i = 0; i < pocet; i++) {
-            for (int j = 0; j < castDlzka; j++) {
-                vysledok[i][j] = i*castDlzka + j;
-                pocetNastavenych[i]++;
-            }
+        GenetickyAlgoritmus g = new GenetickyAlgoritmus(predmety, kapacitaBatoha);
+        g.test(100,true,100000,20,200);
+    }
+
+    public static void otestujPocet(){
+        int velkostMnozinyRieseni = 75;
+        int minPocetIteracii = 400;
+
+        //=============================== Uloha 1
+        ArrayList<Predmet> predmety = vygenerujPredmetyRovnomerne(2000);
+        int kapacitaBatoha = 1000;
+
+
+        for (int i = 0; i < 10; i++) {
+            GenetickyAlgoritmus g = new GenetickyAlgoritmus(predmety, kapacitaBatoha);
+            g.vypocitaj(velkostMnozinyRieseni, true, 10000,50, minPocetIteracii);
         }
-
-        //prerozdelim zvysok
-        for (int i = 0; i < rozsah - (castDlzka*pocet); i++) {
-            vysledok[i][pocetNastavenych[i]] = (castDlzka*pocet) + i;
-            pocetNastavenych[i]++;
+        System.out.println();
+        for (int i = 0; i < 10; i++) {
+            GenetickyAlgoritmus g = new GenetickyAlgoritmus(predmety, kapacitaBatoha);
+            g.vypocitaj(velkostMnozinyRieseni, true, 10000,55, minPocetIteracii);
         }
-
-        //doplnovanie
-        int posunStlpcov = 0;
-        while (vysledok[0][dlzka-1] == 0){
-            for (int i = 0; i < pocet; i++) {
-                int riadok = 1;
-                int stlpec = 0;
-                int poc = pocetNastavenych[i]+pocet-1;
-                for (int j = pocetNastavenych[i]; j < poc; j++) {
-                    if ((i + riadok) % pocet == i) {
-                        riadok++;
-                        stlpec++;
-                    }
-                    if (j == dlzka) break;
-                    vysledok[i][j] = vysledok[(i + riadok) % pocet][(i + stlpec) + posunStlpcov];
-                    pocetNastavenych[i]++;
-                    riadok++;
-                }
-            }
-            posunStlpcov += castDlzka;
+        System.out.println();
+        for (int i = 0; i < 10; i++) {
+            GenetickyAlgoritmus g = new GenetickyAlgoritmus(predmety, kapacitaBatoha);
+            g.vypocitaj(velkostMnozinyRieseni, true, 10000,60, minPocetIteracii);
         }
+        vypocitajNecelociselne(predmety, kapacitaBatoha);
+
+        //=============================== Uloha 2
+        predmety = vygenerujPredmetyRovnomerne(5000);
+        kapacitaBatoha = 2000;
 
 
-
-        for (int i = 0; i < pocet; i++) {
-            for (int j = 0; j < dlzka; j++) {
-                System.out.print(vysledok[i][j] + " ");
-            }
-            System.out.println();
+        for (int i = 0; i < 10; i++) {
+            GenetickyAlgoritmus g = new GenetickyAlgoritmus(predmety, kapacitaBatoha);
+            g.vypocitaj(velkostMnozinyRieseni, true, 30000,100, minPocetIteracii);
         }
-
-        for (int i = 0; i < pocet-1; i++) {
-            for (int j = i+1; j < pocet; j++) {
-                int sum = 0;
-                for (int k = 0; k < dlzka; k++) {
-                    for (int l = 0; l < dlzka; l++) {
-                        if (vysledok[i][k] == vysledok[j][l]) sum++;
-                    }
-                }
-                System.out.println(sum + " ");
-            }
-            System.out.println();
+        System.out.println();
+        for (int i = 0; i < 10; i++) {
+            GenetickyAlgoritmus g = new GenetickyAlgoritmus(predmety, kapacitaBatoha);
+            g.vypocitaj(velkostMnozinyRieseni, true, 30000,105, minPocetIteracii);
         }
-
-        /*int[] kontrola = new int[rozsah];
-        for (int i = 0; i < pocet; i++) {
-            for (int j = 0; j < dlzka; j++) {
-                kontrola[vysledok[i][j]]++;
-            }
+        System.out.println();
+        for (int i = 0; i < 10; i++) {
+            GenetickyAlgoritmus g = new GenetickyAlgoritmus(predmety, kapacitaBatoha);
+            g.vypocitaj(velkostMnozinyRieseni, true, 30000,110, minPocetIteracii);
         }
+        vypocitajNecelociselne(predmety, kapacitaBatoha);
 
-        for (int i = 0; i < kontrola.length; i++) {
-            System.out.print(kontrola[i] + " ");
-        }*/
+        //=============================== Uloha 3
+        predmety = vygenerujPredmetyRovnomerne(8000);
+        kapacitaBatoha = 3000;
 
+
+        for (int i = 0; i < 10; i++) {
+            GenetickyAlgoritmus g = new GenetickyAlgoritmus(predmety, kapacitaBatoha);
+            g.vypocitaj(velkostMnozinyRieseni, true, 60000,150, minPocetIteracii);
+        }
+        System.out.println();
+        for (int i = 0; i < 10; i++) {
+            GenetickyAlgoritmus g = new GenetickyAlgoritmus(predmety, kapacitaBatoha);
+            g.vypocitaj(velkostMnozinyRieseni, true, 60000,155, minPocetIteracii);
+        }
+        System.out.println();
+        for (int i = 0; i < 10; i++) {
+            GenetickyAlgoritmus g = new GenetickyAlgoritmus(predmety, kapacitaBatoha);
+            g.vypocitaj(velkostMnozinyRieseni, true, 60000,160, minPocetIteracii);
+        }
+        vypocitajNecelociselne(predmety, kapacitaBatoha);
+        //=============================== Uloha 4
+        predmety = vygenerujPredmetyLinearne(2000);
+        kapacitaBatoha = 1000;
+
+
+        for (int i = 0; i < 10; i++) {
+            GenetickyAlgoritmus g = new GenetickyAlgoritmus(predmety, kapacitaBatoha);
+            g.vypocitaj(velkostMnozinyRieseni, true, 10000,20, minPocetIteracii);
+        }
+        System.out.println();
+        for (int i = 0; i < 10; i++) {
+            GenetickyAlgoritmus g = new GenetickyAlgoritmus(predmety, kapacitaBatoha);
+            g.vypocitaj(velkostMnozinyRieseni, true, 10000,25, minPocetIteracii);
+        }
+        System.out.println();
+        for (int i = 0; i < 10; i++) {
+            GenetickyAlgoritmus g = new GenetickyAlgoritmus(predmety, kapacitaBatoha);
+            g.vypocitaj(velkostMnozinyRieseni, true, 10000,30, minPocetIteracii);
+        }
+        vypocitajNecelociselne(predmety, kapacitaBatoha);
+
+        //=============================== Uloha 5
+        predmety = vygenerujPredmetyLinearne(5000);
+        kapacitaBatoha = 2000;
+
+
+        for (int i = 0; i < 10; i++) {
+            GenetickyAlgoritmus g = new GenetickyAlgoritmus(predmety, kapacitaBatoha);
+            g.vypocitaj(velkostMnozinyRieseni, true, 30000,40, minPocetIteracii);
+        }
+        System.out.println();
+        for (int i = 0; i < 10; i++) {
+            GenetickyAlgoritmus g = new GenetickyAlgoritmus(predmety, kapacitaBatoha);
+            g.vypocitaj(velkostMnozinyRieseni, true, 30000,45, minPocetIteracii);
+        }
+        System.out.println();
+        for (int i = 0; i < 10; i++) {
+            GenetickyAlgoritmus g = new GenetickyAlgoritmus(predmety, kapacitaBatoha);
+            g.vypocitaj(velkostMnozinyRieseni, true, 30000,50, minPocetIteracii);
+        }
+        vypocitajNecelociselne(predmety, kapacitaBatoha);
+
+        //=============================== Uloha 6
+        predmety = vygenerujPredmetyLinearne(8000);
+        kapacitaBatoha = 3000;
+
+
+        for (int i = 0; i < 10; i++) {
+            GenetickyAlgoritmus g = new GenetickyAlgoritmus(predmety, kapacitaBatoha);
+            g.vypocitaj(velkostMnozinyRieseni, true, 60000,65, minPocetIteracii);
+        }
+        System.out.println();
+        for (int i = 0; i < 10; i++) {
+            GenetickyAlgoritmus g = new GenetickyAlgoritmus(predmety, kapacitaBatoha);
+            g.vypocitaj(velkostMnozinyRieseni, true, 60000,70, minPocetIteracii);
+        }
+        System.out.println();
+        for (int i = 0; i < 10; i++) {
+            GenetickyAlgoritmus g = new GenetickyAlgoritmus(predmety, kapacitaBatoha);
+            g.vypocitaj(velkostMnozinyRieseni, true, 60000,75, minPocetIteracii);
+        }
+        vypocitajNecelociselne(predmety, kapacitaBatoha);
     }
 
     public static void otestujCasovo(){
@@ -93,15 +154,11 @@ public class Main {
         ArrayList<Predmet> predmety = vygenerujPredmetyRovnomerne(2000);
         int kapacitaBatoha = 1000;
 
-        GenetickyAlgoritmus g = new GenetickyAlgoritmus(predmety, kapacitaBatoha);
-        g.vypocitaj(velkostMnozinyRieseni, true, 10000,25, 300);
-
-
-        /*for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
             GenetickyAlgoritmus g = new GenetickyAlgoritmus(predmety, kapacitaBatoha);
             g.vypocitaj(velkostMnozinyRieseni, true, 10000,32, 500);
-        }*/
-        /*System.out.println();
+        }
+        System.out.println();
         for (int i = 0; i < 10; i++) {
             GenetickyAlgoritmus g = new GenetickyAlgoritmus(predmety, kapacitaBatoha);
             g.vypocitaj(velkostMnozinyRieseni, true, 10000,25, 600);
@@ -115,10 +172,10 @@ public class Main {
         for (int i = 0; i < 10; i++) {
             GenetickyAlgoritmus g = new GenetickyAlgoritmus(predmety, kapacitaBatoha);
             g.vypocitaj(velkostMnozinyRieseni, true, 10000,25, minPocetIteracii);
-        }*/
+        }
         vypocitajNecelociselne(predmety, kapacitaBatoha);
 
-/*        //=============================== Uloha 2
+        //=============================== Uloha 2
         predmety = vygenerujPredmetyRovnomerne(5000);
         kapacitaBatoha = 2000;
 
@@ -174,7 +231,7 @@ public class Main {
         for (int i = 0; i < 10; i++) {
             GenetickyAlgoritmus g = new GenetickyAlgoritmus(predmety, kapacitaBatoha);
             g.vypocitaj(velkostMnozinyRieseni, true, 10000,21, 500);
-        }/*
+        }
         System.out.println();
         for (int i = 0; i < 10; i++) {
             GenetickyAlgoritmus g = new GenetickyAlgoritmus(predmety, kapacitaBatoha);
@@ -240,7 +297,7 @@ public class Main {
             GenetickyAlgoritmus g = new GenetickyAlgoritmus(predmety, kapacitaBatoha);
             g.vypocitaj(velkostMnozinyRieseni, true, 60000,69, minPocetIteracii);
         }
-        vypocitajNecelociselne(predmety, kapacitaBatoha);*/
+        vypocitajNecelociselne(predmety, kapacitaBatoha);
     }
 
     public static ArrayList<Predmet> vygenerujPredmetyRovnomerne(int pocet){

@@ -25,7 +25,7 @@ public class GenetickyAlgoritmus {
         if (enchanced) vytvorPociatocnuMnozinuRieseni(pocet, vMR);
         else vytvorPociatocnuMnozinuRieseni(vMR);
 
-        int[] x = new int[predmety.size()];
+        /*int[] x = new int[predmety.size()];
         for (int i = 0; i < mnozinaRieseni.size(); i++) {
             for (int j = 0; j < predmety.size(); j++) {
                 x[j] = x[j] + mnozinaRieseni.get(i).getHodnotuZIndexu(j);
@@ -33,7 +33,7 @@ public class GenetickyAlgoritmus {
         }
         for (int i = 0; i < x.length; i++) {
             System.out.print(x[i] + " ");
-        }
+        }*/
 
         int counter = 0;
 
@@ -220,10 +220,10 @@ public class GenetickyAlgoritmus {
     }
 
     private void vytvorPociatocnuMnozinuRieseni(int pocet, int pocetRieseni){
-        Random random = new Random(123);
+        Random random = new Random();
         predmety.sort(Predmet::compareTo);
 
-        int pocetVyhodnych = predmety.size() / 10;
+        int pocetVyhodnych = predmety.size() / 20;
 
         ArrayList<Integer> vytvaraciArr = null;
         int prekryv = 0;
@@ -232,17 +232,13 @@ public class GenetickyAlgoritmus {
             prekryv++;
         }
 
-        int posun = ((vytvaraciArr.size() - (pocetRieseni * pocet)) / pocetRieseni)/pocet;
-
         if (vytvaraciArr.size() >= pocet*pocetRieseni) {
-            int index = 0;
-            for (int i = 0; i < pocetRieseni; i++) {
+            for (int i = 0; i + pocet < vytvaraciArr.size(); ) {
                 Riesenie r = new Riesenie(predmety.size());
                 for (int j = 0; j < pocet; j++) {
-                    r.nastavNaIndexeHodnotu(vytvaraciArr.get(index), 1);
-                    index++;
+                    r.nastavNaIndexeHodnotu(vytvaraciArr.get(i), 1);
+                    i++;
                 }
-                index += posun*pocet;
                 while (true){
                     int id = random.nextInt(predmety.size()-pocetVyhodnych) + pocetVyhodnych;
                     r.nastavNaIndexeHodnotu(id,1);
@@ -279,53 +275,43 @@ public class GenetickyAlgoritmus {
         ArrayList<Integer> Amn = new ArrayList<>();
         ArrayList<Integer> b = new ArrayList<>();
         int x = 0;
-        for (int i = 2; i < p; i++) {
+        for (int k = 2; k < p; k++) {
 
-            x = a.get(i-1) + 1;
+            x = a.get(k-1) + 1;
 
             a.add(0);
-            while (a.get(i) == 0 && x < m){
+            while (a.get(k) == 0 && x < m){
                 Amn.clear();
-                for (int j = 0; j < i; j++) {
-                    for (int k = 0; k < j; k++) {
-                        Amn.add(a.get(j) - a.get(k)%m);
-                        Amn.add(a.get(k) - a.get(j)%m);
+                for (int j = 0; j < k; j++) {
+                    for (int i = 0; i < j; i++) {
+                        Amn.add((a.get(j) - a.get(i))%m);
+                        Amn.add(m + ((a.get(i) - a.get(j))%m));
                     }
                 }
                 int y = 1;
-                for (int j = 0; j < i; j++) {
-                    int value = x-a.get(j)%m;
-                    int sum = 0;
-                    for (int cislo:Amn) {
-                        if (cislo == value) sum++;
-                    }
-                    if (sum < t) {
+                for (int i = 0; i < k; i++) {
+                    if (countOccurrences(Amn, (x - a.get(i) + m) % m) < t) {
                         y = y * 1;
-                        Amn.add(value);
+                        Amn.add((x - a.get(i) + m) % m);
                     } else {
                         y = y * 0;
                     }
 
-                    value = a.get(j)%m;
-                    sum = 0;
-                    for (int cislo:Amn) {
-                        if (cislo == value) sum++;
-                    }
-                    if (sum < t){
+                    if (countOccurrences(Amn, (a.get(i) - x + m) % m) < t) {
                         y = y * 1;
-                        Amn.add(value);
+                        Amn.add((a.get(i) - x + m) % m);
                     } else {
                         y = y * 0;
                     }
                 }
                 if (y == 1){
-                    a.set(i,x);
+                    a.set(k,x);
                 } else {
                     x = x + 1;
                 }
 
             }
-            if (a.get(i) == 0){
+            if (a.get(k) == 0){
                 break;
             }
         }
@@ -336,10 +322,36 @@ public class GenetickyAlgoritmus {
         } else {
             for (int i = 0; i < m; i++) {
                 for (int j = 0; j < p; j++) {
-                    b.add(i+a.get(j)%m);
+                    b.add((i+a.get(j))%m);
                 }
             }
         }
         return b;
+    }
+
+
+    public void test(int vMR, boolean enchanced, long trvanie, int pocet, int minPocetIteracii){
+        ArrayList<Integer> vytvaraciArr = null;
+        int prekryv = 5;
+
+        while (vytvaraciArr == null){
+            System.out.println(vMR + " " + pocet + " " + prekryv);
+            vytvaraciArr = mptPostup(vMR, pocet, prekryv);
+            prekryv++;
+        }
+
+        for (int i = 0; i < vytvaraciArr.size(); i++) {
+            System.out.print(vytvaraciArr.get(i) + " ");
+        }
+    }
+
+    public static int countOccurrences(ArrayList<Integer> list, int value) {
+        int count = 0;
+        for (int num : list) {
+            if (num == value) {
+                count++;
+            }
+        }
+        return count;
     }
 }
