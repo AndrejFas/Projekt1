@@ -22,6 +22,8 @@ public class GenetickyAlgoritmus {
     public void vypocitaj(int vMR, boolean enchanced, long trvanie, int pocet, int minPocetIteracii){
         Random ran = new Random();
 
+        long counterPoc = currentTimeMillis();
+
         if (enchanced) vytvorPociatocnuMnozinuRieseni(pocet, vMR);
         else vytvorPociatocnuMnozinuRieseni(vMR);
 
@@ -34,6 +36,8 @@ public class GenetickyAlgoritmus {
         for (int i = 0; i < x.length; i++) {
             System.out.print(x[i] + " ");
         }*/
+
+        System.out.println((currentTimeMillis() - counterPoc)/1000);
 
         int counter = 0;
 
@@ -223,7 +227,7 @@ public class GenetickyAlgoritmus {
         Random random = new Random();
         predmety.sort(Predmet::compareTo);
 
-        int pocetVyhodnych = predmety.size() / 20;
+        int pocetVyhodnych = predmety.size() / 10;
 
         ArrayList<Integer> vytvaraciArr = null;
         int prekryv = 0;
